@@ -1,8 +1,6 @@
 <template>
   <header>
-    <div class="container">
-      <LoginForm msg="Bienvenido!" />
-    </div>
+    <router-view> </router-view>
   </header>
 </template>
 
@@ -17,8 +15,7 @@ export default {
 </script>
 
 <style scoped>
-
-.container{
+.container {
   margin: 0 auto;
   display: flex;
   justify-content: center;

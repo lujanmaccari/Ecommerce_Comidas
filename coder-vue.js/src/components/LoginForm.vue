@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>{{ msg }}</h1>
+    <h1>Bienvenido!</h1>
     <div>
       <form className="form">
         <div>
@@ -17,7 +17,7 @@
             placeholder="Contraseña"
           />
         </div>
-        <button @click="login" class="btn">Iniciar sesión</button>
+        <a @click="login" class="btn" :href="path">Iniciar sesión</a>
       </form>
     </div>
   </div>
@@ -29,7 +29,8 @@ export default {
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      path: "/Dashboard"
     }
   },
   props: {
@@ -59,25 +60,28 @@ export default {
   justify-content: space-evenly;
   height: 40vh;
 }
-.btn{
+.btn {
   margin-top: 20px;
   border: none;
   border-radius: 10px;
-  background-color:rgba(111, 175, 230, 0.452);
+  background-color: rgba(111, 175, 230, 0.452);
   padding: 8px;
-  cursor: pointer
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  color: black;
 }
-.btn:hover{
+.btn:hover {
   background-color: rgba(111, 175, 230, 0.603);
 }
-.input{
+.input {
   border: none;
   border-radius: 10px;
   padding: 5px;
   background-color: rgba(205, 230, 252, 0.425);
 }
-.text{
+.text {
   font-size: 15px;
-  cursor: default
+  cursor: default;
 }
 </style>
