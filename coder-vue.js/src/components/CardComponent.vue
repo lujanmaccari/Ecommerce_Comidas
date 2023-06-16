@@ -68,6 +68,9 @@ export default {
       const existingProduct = this.cart.find((item) => item.id === product.id)
       if (existingProduct) {
         existingProduct.cantidad++
+        alert('Se agregó un producto al carrito')
+        localStorage.setItem('carrito', JSON.stringify(this.cart))
+
       } else {
         this.cart.push({
           id: product.id,
@@ -77,6 +80,8 @@ export default {
           descripcion: product.descripcion,
           cantidad: 1
         })
+        alert('Se agregó un producto al carrito')
+        localStorage.setItem('carrito', JSON.stringify(this.cart))
       }
     }
   }
