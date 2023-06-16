@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>Bienvenido!</h1>
+    <h2>Creá tu usuario</h2>
     <div>
       <form className="form">
         <div>
@@ -17,44 +17,27 @@
             placeholder="Contraseña"
           />
         </div>
-        <a @click="login" class="btn">Iniciar sesión</a>
-        <a :href="registro" class="register">Registrarse</a>
+
+        <a class="btn" :href="path" @click="guardarRegistro">Registrarse</a>
       </form>
     </div>
   </div>
 </template>
 
 <script>
-import { useRouter } from 'vue-router'
-
 export default {
-  name: 'LoginForm',
+  name: 'RegisterComponent',
   data() {
-    return {
-      email: '',
-      password: '',
-      path: '/Dashboard',
-      registro: '/Register'
+    return{
+      path: "/"
     }
+   
   },
-  setup() {
-    const router = useRouter()
-    function navigateToDashboard() {
-      router.push('/Dashboard')
-    }
-    return {
-      navigateToDashboard
-    }
-  },
+
   methods: {
-    login() {
-      const email = localStorage.getItem('email')
-      const password = localStorage.getItem('password')
-      if (this.email != email || this.password != password) {
-        alert('error')
-      } else {
-        this.navigateToDashboard()
-      }
+    guardarRegistro() {
+      localStorage.setItem("email", this.email);
+      localStorage.setItem("password", this.password);
     }
   }
 }
@@ -100,14 +83,8 @@ export default {
   font-size: 15px;
   cursor: default;
 }
-.register {
-  text-decoration: none;
-  color: black;
-  align-self: center;
-  font-size: 12px;
-}
-.register:hover {
-  color:rgb(155, 176, 194);
-  background-color: transparent;
+h2 {
+  width: 30vh;
+  text-align: center;
 }
 </style>
