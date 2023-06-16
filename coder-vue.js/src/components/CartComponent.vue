@@ -1,15 +1,17 @@
 <template>
   <div>
-   Cart
+    <h1>Tus productos seleccionados</h1>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'CartComponent',
-  data() {
-    return {}
-  }
-}
+export default {}
 </script>
-<style scoped></style>
+
+<style scoped>
+h1 {
+  text-align: center;
+  font-weight: bold;
+  margin: 80px;
+}
+</style>
