@@ -17,7 +17,7 @@ const router = createRouter({
     { path: '/', redirect: '/login' },
     { path: '/login', component: LoginForm },
     { path: '/Dashboard', component: DashboardComponent },
-    { path: '/Register', component: RegisterComponent },
+    { path: '/Register', component: RegisterComponent, name: "register" },
     { path: '/Cart', component: CartComponent },
   ]
 })

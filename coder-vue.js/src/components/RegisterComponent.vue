@@ -46,9 +46,6 @@ export default {
       usuario: new Usuarios()
     }
   },
-  created() {
-    console.log(this.formState)
-  },
   methods: {
     async formSubmitHandler() {
       console.log(this.formState)
