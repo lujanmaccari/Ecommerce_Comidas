@@ -2,42 +2,65 @@
   <div class="container">
     <h2>Creá tu usuario</h2>
     <div>
-      <form className="form">
-        <div>
-          <label for="email" class="text">Email</label>
-          <input v-model="email" type="email" class="input" id="email" placeholder="Email" />
-        </div>
-        <div>
-          <label for="password" class="text">Contraseña</label>
-          <input
-            v-model="password"
-            type="password"
-            class="input"
-            id="password"
-            placeholder="Contraseña"
-          />
-        </div>
+      <div v-if="incomplete">Complete todos los campos</div>
+      <div v-if="sent">Gracias por ponerte en contacto</div>
 
-        <a class="btn" :href="path" @click="guardarRegistro">Registrarse</a>
+      <form @submit.prevent="formSubmitHandler">
+        <div>
+          <label for="name">Nombre</label>
+          <input type="text" id="name" name="name" v-model="formState.name" />
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" v-model="formState.email" />
+        </div>
+        <div>
+          <label for="message">Contraseña</label>
+          <input type="text" id="password" name="password" v-model="formState.password" />
+        </div>
+        <div>
+          <label for="isAdmin">¿Es administrador?</label>
+          <input type="checkbox" id="isAdmin" v-model="formState.isAdmin" name="isAdmin" />
+        </div>
+        <button>Enviar</button>
       </form>
     </div>
   </div>
 </template>
 
 <script>
+import { Usuarios } from '../usuarios.js'
 export default {
   name: 'RegisterComponent',
   data() {
-    return{
-      path: "/"
+    return {
+      // path: '/',
+      sent: false,
+      incomplete: false,
+      formState: {
+        name: '',
+        email: '',
+        password: '',
+        isAdmin: false
+      },
+      usuario: new Usuarios()
     }
-   
   },
-
+  created() {
+    console.log(this.formState)
+  },
   methods: {
-    guardarRegistro() {
-      localStorage.setItem("email", this.email);
-      localStorage.setItem("password", this.password);
+    async formSubmitHandler() {
+      console.log(this.formState)
+
+      if (!this.formState.name || !this.formState.email || !this.formState.password) {
+        this.incomplete = true
+      } else {
+        let newUser = await this.usuario.guardarUsuario(this.formState)
+        console.log(newUser)
+        this.sent = true
+        this.incomplete = false
+      }
     }
   }
 }
