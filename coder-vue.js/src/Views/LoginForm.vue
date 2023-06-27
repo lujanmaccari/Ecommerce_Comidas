@@ -54,7 +54,7 @@ export default {
         this.login = true
         this.invalidCredentials = false
         setTimeout(() => {
-          this.$router.push(encontrarUsuario.isAdmin ? '/Dashboard' : '/Cart')
+          this.$router.push(encontrarUsuario.isAdmin ? '/admin-panel' : '/user-panel')
         }, 3000)
       } else {
         this.invalidCredentials = true

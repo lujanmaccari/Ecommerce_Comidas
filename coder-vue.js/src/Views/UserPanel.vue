@@ -53,10 +53,9 @@
 </template>
 
 <script>
-
 import { GestionProductos } from '../gestionProductos'
 export default {
-  name: 'DashboardComponent',
+  name: 'UserPanel',
   data() {
     return {
       gestionProductos: new GestionProductos(),
@@ -68,30 +67,15 @@ export default {
     this.obtenerProductos()
   },
   methods: {
-    // addToCart(product) {
-    //   const existingProduct = this.cart.find((item) => item.id === product.id)
-    //   if (existingProduct) {
-    //     existingProduct.cantidad++
-    //     alert('Se agregó un producto al carrito')
-    //     localStorage.setItem('carrito', JSON.stringify(this.cart))
-    //   } else {
-    //     this.cart.push({
-    //       id: product.id,
-    //       producto: product.producto,
-    //       precio: product.precio,
-    //       imagen: product.imagen,
-    //       descripcion: product.descripcion,
-    //       cantidad: 1
-    //     })
-    //     alert('Se agregó un producto al carrito')
-    //     localStorage.setItem('carrito', JSON.stringify(this.cart))
-    //   }
-    // }
-
     async obtenerProductos() {
       let { data: comidas } = await this.gestionProductos.obtenerProductos()
       this.listadoProductos = comidas
       console.log(this.listadoProductos)
+    },
+    async eliminarProducto() {
+    //   let { data: comidas } = await this.gestionProductos.obtenerProductos()
+    //   this.listadoProductos = comidas
+    //   console.log(this.listadoProductos)
     }
   }
 }
