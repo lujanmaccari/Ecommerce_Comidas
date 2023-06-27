@@ -1,11 +1,8 @@
-
 import { createRouter, createWebHistory } from 'vue-router'
-
 import DashboardComponent from './Views/DashboardComponent.vue'
 import LoginForm from './Views/LoginForm.vue'
 import RegisterComponent from './Views/RegisterComponent.vue'
 import CartComponent from './Views/CartComponent.vue'
-
 
 const routes = [
   { path: '/', redirect: '/login', name: 'login' },

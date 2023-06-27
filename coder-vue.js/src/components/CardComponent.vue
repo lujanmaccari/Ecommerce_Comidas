@@ -3,14 +3,14 @@
     <h1>Nuestra selección para vos</h1>
 
     <div class="container">
-      <div class="card" v-for="item in info" :key="item.id">
+      <div class="card" v-for="item in listadoProductos" :key="item.id">
         <h3>
-          {{ item.producto }}
+          {{ item.product }}
         </h3>
 
-        <img :src="item.imagen" alt="hamburguesa" class="imagen" />
+        <img :src="item.image" alt="hamburguesa" class="imagen" />
 
-        <p>$ {{ item.precio }}</p>
+        <p>$ {{ item.price }}</p>
         <div>
           <button class="btn" @click="addToCart(item)">
             <svg
@@ -53,36 +53,45 @@
 </template>
 
 <script>
-import comida from '../dataComida'
 
+import { GestionProductos } from '../gestionProductos'
 export default {
   name: 'DashboardComponent',
   data() {
     return {
-      info: comida,
+      gestionProductos: new GestionProductos(),
+      listadoProductos: [],
       cart: []
     }
   },
+  mounted() {
+    this.obtenerProductos()
+  },
   methods: {
-    addToCart(product) {
-      const existingProduct = this.cart.find((item) => item.id === product.id)
-      if (existingProduct) {
-        existingProduct.cantidad++
-        alert('Se agregó un producto al carrito')
-        localStorage.setItem('carrito', JSON.stringify(this.cart))
+    // addToCart(product) {
+    //   const existingProduct = this.cart.find((item) => item.id === product.id)
+    //   if (existingProduct) {
+    //     existingProduct.cantidad++
+    //     alert('Se agregó un producto al carrito')
+    //     localStorage.setItem('carrito', JSON.stringify(this.cart))
+    //   } else {
+    //     this.cart.push({
+    //       id: product.id,
+    //       producto: product.producto,
+    //       precio: product.precio,
+    //       imagen: product.imagen,
+    //       descripcion: product.descripcion,
+    //       cantidad: 1
+    //     })
+    //     alert('Se agregó un producto al carrito')
+    //     localStorage.setItem('carrito', JSON.stringify(this.cart))
+    //   }
+    // }
 
-      } else {
-        this.cart.push({
-          id: product.id,
-          producto: product.producto,
-          precio: product.precio,
-          imagen: product.imagen,
-          descripcion: product.descripcion,
-          cantidad: 1
-        })
-        alert('Se agregó un producto al carrito')
-        localStorage.setItem('carrito', JSON.stringify(this.cart))
-      }
+    async obtenerProductos() {
+      let { data: comidas } = await this.gestionProductos.obtenerProductos()
+      this.listadoProductos = comidas
+      console.log(this.listadoProductos)
     }
   }
 }
