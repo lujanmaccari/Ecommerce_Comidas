@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import CardComponent from './CardComponent.vue'
-import HeaderComponent from './HeaderComponent.vue'
+import CardComponent from '../components/CardComponent.vue'
+import HeaderComponent from '../components/HeaderComponent.vue'
 
 export default {
   components: { CardComponent, HeaderComponent },
