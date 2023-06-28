@@ -6,6 +6,7 @@ import AdminPanel from './Views/AdminPanel.vue'
 import UserPanel from './Views/UserPanel.vue'
 
 const routes = [
+  { path: '/', redirect: '/login' },
   { path: '/', component: LoginForm,  name: 'login' },
   { path: '/login', component: LoginForm, name: 'login' },
   { path: '/register', component: RegisterComponent, name: 'register' },

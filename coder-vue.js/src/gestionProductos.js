@@ -14,6 +14,15 @@ export class GestionProductos {
     }
   }
 
+  async obtenerProductoPorId(id) {
+    try {
+      const response =  await axios.get(this.url + id)
+      return response.data
+    } catch (error) {
+      console.log('Error en obtener producto' + error.message)
+    }
+  }
+
   async guardarProducto(product) {
     try {
       const response = await axios.post(this.url, product)

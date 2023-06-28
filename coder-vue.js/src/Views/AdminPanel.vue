@@ -1,7 +1,15 @@
 <template>
   <div>
     <h1>Productos disponibles en la web</h1>
-    <button @click="toggleTable" class="btn">Agregar un nuevo producto</button>
+    <div class="flex justify-center">
+      <button
+        @click="toggleTable"
+        type="button"
+        class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+      >
+        Agregar un nuevo producto
+      </button>
+    </div>
     <div v-if="showTable">
       <div class="form">
         <input type="text" placeholder="Ingrese nombre" v-model="formState.nombre" />
@@ -9,7 +17,13 @@
         <input type="text" placeholder="Ingrese precio" v-model="formState.precio" />
         <input type="text" placeholder="Ingrese foto" v-model="formState.foto" />
       </div>
-      <button class="btn">Agregar</button>
+      <div class="flex justify-center">
+        <button
+          class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+        >
+          Agregar
+        </button>
+      </div>
     </div>
 
     <div class="container">
@@ -22,8 +36,22 @@
 
         <p>$ {{ item.price }}</p>
         <div>
-          <button @click="eliminarComida(item.id)">delete</button>
-          <button @click="actualizarComida(item.id)">edit</button>
+          <i class="bi bi-trash"></i>
+          <button
+            @click="eliminarComida(item.id)"
+            type="button"
+            class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+          >
+            Delete
+          </button>
+
+          <button
+            @click="obtenerComida(item.id)"
+            type="button"
+            class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+          >
+            Edit
+          </button>
         </div>
       </div>
     </div>
@@ -48,8 +76,7 @@ export default {
         foto: '',
         isInCart: false
       },
-      id: '',
-      
+      id: ''
     }
   },
   mounted() {
@@ -65,14 +92,15 @@ export default {
     toggleTable() {
       this.showTable = !this.showTable
     },
-    
-    async actualizarComida (idProduct) {
+
+    async actualizarComida(idProduct) {
       this.id = idProduct
       console.log(this.id)
 
-      let comida = await this.gestionProductos.actualizarProducto( this.id, this.formState)
+      let comida = await this.gestionProductos.actualizarProducto(this.id, this.formState)
       console.log(comida)
     },
+
     async eliminarComida(idProduct) {
       this.id = idProduct
       console.log(this.id)
@@ -81,6 +109,13 @@ export default {
       console.log(comida)
     },
 
+    async obtenerComida(idProduct) {
+      this.id = idProduct
+      console.log(this.id)
+      this.showTable = true
+      let comida = await this.gestionProductos.obtenerProductoPorId(this.id)
+      console.log(comida)
+    }
   }
 }
 </script>

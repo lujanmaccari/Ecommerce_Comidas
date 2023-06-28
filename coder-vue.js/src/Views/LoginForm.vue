@@ -1,10 +1,21 @@
 <template>
   <div class="container">
+    <div
+      v-if="invalidCredentials"
+      class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+      role="alert"
+    >
+      Credenciales erroneas
+    </div>
+    <div
+      v-if="login"
+      class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+    >
+      Inicio de sesion correcto
+    </div>
     <h1>Bienvenido!</h1>
     <div>
       <form @submit.prevent="formSubmitHandler">
-        <div v-if="invalidCredentials">Credenciales erroneas</div>
-        <div v-if="login">Inicio de sesion correcto</div>
         <div>
           <label for="email">Email</label>
           <input type="email" id="email" name="email" v-model="formState.email" />
@@ -14,8 +25,14 @@
           <input type="text" id="password" name="password" v-model="formState.password" />
         </div>
 
-        <button>Enviar</button>
-        <router-link :to="{ name: 'register' }">Registrarse</router-link>
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-5 rounded">
+          Enviar
+        </button>
+        <router-link
+          :to="{ name: 'register' }"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >Registrarse</router-link
+        >
       </form>
     </div>
   </div>
@@ -79,39 +96,5 @@ export default {
 
   justify-content: space-evenly;
   height: 40vh;
-}
-.btn {
-  margin-top: 20px;
-  border: none;
-  border-radius: 10px;
-  background-color: rgba(111, 175, 230, 0.452);
-  padding: 8px;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  color: black;
-}
-.btn:hover {
-  background-color: rgba(111, 175, 230, 0.603);
-}
-.input {
-  border: none;
-  border-radius: 10px;
-  padding: 5px;
-  background-color: rgba(205, 230, 252, 0.425);
-}
-.text {
-  font-size: 15px;
-  cursor: default;
-}
-.register {
-  text-decoration: none;
-  color: black;
-  align-self: center;
-  font-size: 12px;
-}
-.register:hover {
-  color: rgb(155, 176, 194);
-  background-color: transparent;
 }
 </style>
