@@ -22,8 +22,8 @@
 
         <p>$ {{ item.price }}</p>
         <div>
-          <button>delete</button>
-          <button>edit</button>
+          <button @click="eliminarComida(item.id)">delete</button>
+          <button @click="actualizarComida(item.id)">edit</button>
         </div>
       </div>
     </div>
@@ -45,8 +45,11 @@ export default {
         nombre: '',
         descripcion: '',
         precio: '',
-        foto: ''
-      }
+        foto: '',
+        isInCart: false
+      },
+      id: '',
+      
     }
   },
   mounted() {
@@ -54,20 +57,36 @@ export default {
   },
   methods: {
     async obtenerProductos() {
-      let { data: comidas } = await this.gestionProductos.obtenerProductos()
+      let comidas = await this.gestionProductos.obtenerProductos()
       this.listadoProductos = comidas
       console.log(this.listadoProductos)
     },
+
     toggleTable() {
       this.showTable = !this.showTable
-    }
+    },
+    
+    async actualizarComida (idProduct) {
+      this.id = idProduct
+      console.log(this.id)
+
+      let comida = await this.gestionProductos.actualizarProducto( this.id, this.formState)
+      console.log(comida)
+    },
+    async eliminarComida(idProduct) {
+      this.id = idProduct
+      console.log(this.id)
+
+      let comida = await this.gestionProductos.borrarProducto(this.id)
+      console.log(comida)
+    },
+
   }
 }
 </script>
 
 <style scoped>
 .container {
-
   height: 100vh;
   margin: 0 auto;
   display: flex;

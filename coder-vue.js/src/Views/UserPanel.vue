@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     async obtenerProductos() {
-      let { data: comidas } = await this.gestionProductos.obtenerProductos()
+      let comidas = await this.gestionProductos.obtenerProductos()
       this.listadoProductos = comidas
       console.log(this.listadoProductos)
     },
