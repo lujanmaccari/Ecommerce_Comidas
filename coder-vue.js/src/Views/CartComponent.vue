@@ -1,50 +1,41 @@
 <template>
   <div>
     <h1>Tus productos seleccionados</h1>
+    <p>Total de artículos: {{ cartItems.length }}</p>
+    <p>Total a pagar: ${{ cartTotal }}</p>
     <div class="container">
-      <div class="card" v-for="item in localStorageItem" :key="item.id">
+      <div class="card" v-for="product in cartItems" :key="product.id">
         <h3>
-          {{ item.producto }}
+          {{ product.product }}
         </h3>
 
-        <img :src="item.imagen" alt="hamburguesa" class="imagen" />
+        <img :src="product.image" alt="hamburguesa" class="imagen" />
+
+        <p>$ {{ product.price }}</p>
       </div>
     </div>
-    <p>Total a pagar: ${{ total }}</p>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-  data() {
-    return {
-      localStorageItem: null
-    }
-  },
-  mounted() {
-    this.localStorageItem = localStorage.getItem('carrito')
-    this.localStorageItem = JSON.parse(this.localStorageItem)
-  },
   computed: {
-    total() {
-      if (this.localStorageItem != null) {
-        return this.localStorageItem.reduce(
-          (acumulador, producto) => acumulador + producto.precio,
-          0
-        )
-      }
-      return 0
-    }
+    ...mapGetters(['cartItems', 'cartTotal'])
+    
   }
 }
 </script>
 
 <style scoped>
 .container {
+  height: 100vh;
+  margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  height: fit-content;
   justify-content: center;
+  align-items: center;
 }
 h1 {
   text-align: center;
