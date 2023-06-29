@@ -1,5 +1,13 @@
 <template>
   <div>
+    <div class="flex justify-end gap-4">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-5 rounded">
+        <router-link :to="{ name: 'login' }"> Iniciar sesión </router-link>
+      </button>
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-5 rounded">
+        <router-link :to="{ name: 'register' }"> Registrarse </router-link>
+      </button>
+    </div>
     <h1>Nuestra selección para vos</h1>
 
     <div class="container">
@@ -53,12 +61,12 @@
 </template>
 
 <script>
-import { GestionProductos } from '../gestionProductos'
+import { obtenerProductos } from '../gestionProductos'
 export default {
   name: 'UserPanel',
   data() {
     return {
-      gestionProductos: new GestionProductos(),
+      // gestionProductos: new GestionProductos(),
       listadoProductos: [],
       cart: []
     }
@@ -68,14 +76,14 @@ export default {
   },
   methods: {
     async obtenerProductos() {
-      let comidas = await this.gestionProductos.obtenerProductos()
+      let comidas = await obtenerProductos()
       this.listadoProductos = comidas
       console.log(this.listadoProductos)
     },
     async eliminarProducto() {
-    //   let { data: comidas } = await this.gestionProductos.obtenerProductos()
-    //   this.listadoProductos = comidas
-    //   console.log(this.listadoProductos)
+      //   let { data: comidas } = await this.gestionProductos.obtenerProductos()
+      //   this.listadoProductos = comidas
+      //   console.log(this.listadoProductos)
     }
   }
 }
@@ -83,9 +91,12 @@ export default {
 
 <style scoped>
 .container {
+  height: 100vh;
+  margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  height: 100vh;
+  justify-content: center;
+  align-items: center;
 }
 .card {
   background-color: aliceblue;

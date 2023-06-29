@@ -59,13 +59,13 @@
 </template>
 
 <script>
-import { GestionProductos } from '../gestionProductos'
+import  {actualizarProducto, borrarProducto, obtenerProductoPorId, obtenerProductos}  from '../gestionProductos'
 
 export default {
   name: 'AdminPanel',
   data() {
     return {
-      gestionProductos: new GestionProductos(),
+      // gestionProductos: new GestionProductos(),
       listadoProductos: [],
       cart: [],
       showTable: false,
@@ -80,11 +80,11 @@ export default {
     }
   },
   mounted() {
-    this.obtenerProductos()
+    this.obtenerComidas()
   },
   methods: {
-    async obtenerProductos() {
-      let comidas = await this.gestionProductos.obtenerProductos()
+    async obtenerComidas() {
+      let comidas = await obtenerProductos()
       this.listadoProductos = comidas
       console.log(this.listadoProductos)
     },
@@ -97,7 +97,7 @@ export default {
       this.id = idProduct
       console.log(this.id)
 
-      let comida = await this.gestionProductos.actualizarProducto(this.id, this.formState)
+      let comida = await actualizarProducto(this.id, this.formState)
       console.log(comida)
     },
 
@@ -105,7 +105,7 @@ export default {
       this.id = idProduct
       console.log(this.id)
 
-      let comida = await this.gestionProductos.borrarProducto(this.id)
+      let comida = await borrarProducto(this.id)
       console.log(comida)
     },
 
@@ -113,7 +113,7 @@ export default {
       this.id = idProduct
       console.log(this.id)
       this.showTable = true
-      let comida = await this.gestionProductos.obtenerProductoPorId(this.id)
+      let comida = await obtenerProductoPorId(this.id)
       console.log(comida)
     }
   }
