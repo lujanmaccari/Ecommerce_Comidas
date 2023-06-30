@@ -19,22 +19,24 @@
       </div>
       <div class="flex justify-center">
         <button
+          @click="guardarProducto(formState)"
           class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
         >
           Agregar
         </button>
       </div>
+      <p v-if="addedToCart">Agregado!</p>
     </div>
 
     <div class="container">
       <div class="card" v-for="item in listadoProductos" :key="item.id">
         <h3>
-          {{ item.product }}
+          {{ item.nombre }}
         </h3>
 
-        <img :src="item.image" alt="hamburguesa" class="imagen" />
+        <img :src="item.foto" alt="hamburguesa" class="imagen" />
 
-        <p>$ {{ item.price }}</p>
+        <p>$ {{ item.precio }}</p>
         <div>
           <i class="bi bi-trash"></i>
           <button
@@ -59,7 +61,14 @@
 </template>
 
 <script>
-import  {actualizarProducto, borrarProducto, obtenerProductoPorId, obtenerProductos}  from '../gestionProductos'
+import axios from 'axios'
+
+import {
+  actualizarProducto,
+  borrarProducto,
+  obtenerProductoPorId,
+  obtenerProductos
+} from '../gestionProductos'
 
 export default {
   name: 'AdminPanel',
@@ -76,7 +85,8 @@ export default {
         foto: '',
         isInCart: false
       },
-      id: ''
+      id: '',
+      addedToCart: false
     }
   },
   mounted() {
@@ -104,9 +114,14 @@ export default {
     async eliminarComida(idProduct) {
       this.id = idProduct
       console.log(this.id)
-
-      let comida = await borrarProducto(this.id)
-      console.log(comida)
+      try {
+        const response = await axios.delete(
+          'https://6498a1459543ce0f49e236df.mockapi.io/products/' + this.id
+        )
+        return response.data
+      } catch (error) {
+        console.log('Error en borrar producto' + error.message)
+      }
     },
 
     async obtenerComida(idProduct) {
@@ -115,6 +130,24 @@ export default {
       this.showTable = true
       let comida = await obtenerProductoPorId(this.id)
       console.log(comida)
+    },
+
+    async guardarProducto(producto) {
+      try {
+        const response = await axios.post(
+          'https://6498a1459543ce0f49e236df.mockapi.io/products/',
+          producto
+        )
+        console.log(this.formState, 'FROM')
+
+        if (response.status === 201) {
+          this.addedToCart = true
+        }
+
+        return response.data
+      } catch (error) {
+        console.log('Error en guardar producto' + error.message)
+      }
     }
   }
 }
