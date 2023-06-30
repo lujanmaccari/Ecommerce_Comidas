@@ -19,6 +19,14 @@
       </div>
       <div class="flex justify-center">
         <button
+          v-if="actualizar"
+          @click="actualizarComida()"
+          class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+        >
+          Actualizar
+        </button>
+        <button
+          v-else
           @click="guardarProducto(formState)"
           class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
         >
@@ -26,6 +34,7 @@
         </button>
       </div>
       <p v-if="addedToCart">Agregado!</p>
+      <p v-if="mensajeActualizar">Actualizado!</p>
     </div>
 
     <div class="container">
@@ -63,18 +72,12 @@
 <script>
 import axios from 'axios'
 
-import {
-  actualizarProducto,
-  borrarProducto,
-  obtenerProductoPorId,
-  obtenerProductos
-} from '../gestionProductos'
+import { obtenerProductos } from '../gestionProductos'
 
 export default {
   name: 'AdminPanel',
   data() {
     return {
-      // gestionProductos: new GestionProductos(),
       listadoProductos: [],
       cart: [],
       showTable: false,
@@ -86,7 +89,9 @@ export default {
         isInCart: false
       },
       id: '',
-      addedToCart: false
+      addedToCart: false,
+      actualizar: false,
+      mensajeActualizar: false
     }
   },
   mounted() {
@@ -96,24 +101,29 @@ export default {
     async obtenerComidas() {
       let comidas = await obtenerProductos()
       this.listadoProductos = comidas
-      console.log(this.listadoProductos)
     },
 
     toggleTable() {
       this.showTable = !this.showTable
     },
 
-    async actualizarComida(idProduct) {
-      this.id = idProduct
-      console.log(this.id)
-
-      let comida = await actualizarProducto(this.id, this.formState)
-      console.log(comida)
+    async actualizarComida() {
+      try {
+        const response = await axios.put(
+          'https://6498a1459543ce0f49e236df.mockapi.io/products/' + this.id,
+          this.formState
+        )
+        if (response.status === 200) {
+          this.mensajeActualizar = true
+        }
+        return response.data
+      } catch (error) {
+        console.log('Error en actualizar producto' + error.message)
+      }
     },
 
     async eliminarComida(idProduct) {
       this.id = idProduct
-      console.log(this.id)
       try {
         const response = await axios.delete(
           'https://6498a1459543ce0f49e236df.mockapi.io/products/' + this.id
@@ -126,10 +136,24 @@ export default {
 
     async obtenerComida(idProduct) {
       this.id = idProduct
-      console.log(this.id)
       this.showTable = true
-      let comida = await obtenerProductoPorId(this.id)
-      console.log(comida)
+      this.actualizar = true
+      try {
+        const response = await axios.get(
+          `https://6498a1459543ce0f49e236df.mockapi.io/products/${this.id}`
+        )
+        if (response.status === 200) {
+          const producto = response.data
+          console.log(response.data)
+          this.formState.nombre = producto.nombre
+          this.formState.descripcion = producto.descripcion
+          this.formState.precio = producto.precio
+          this.formState.foto = producto.foto
+          this.id = producto.id
+        }
+      } catch (error) {
+        console.log('Error al obtener el producto', error.message)
+      }
     },
 
     async guardarProducto(producto) {
@@ -138,12 +162,9 @@ export default {
           'https://6498a1459543ce0f49e236df.mockapi.io/products/',
           producto
         )
-        console.log(this.formState, 'FROM')
-
         if (response.status === 201) {
           this.addedToCart = true
         }
-
         return response.data
       } catch (error) {
         console.log('Error en guardar producto' + error.message)
