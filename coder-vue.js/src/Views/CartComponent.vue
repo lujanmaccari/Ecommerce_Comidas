@@ -1,17 +1,21 @@
 <template>
   <div>
     <h1>Tus productos seleccionados</h1>
-    <p>Total de artículos: {{ cartItems.length }}</p>
-    <p>Total a pagar: ${{ cartTotal }}</p>
+
+    <div class="containerResumen">
+      <p>Total de artículos: {{ cartItems.length }}</p>
+      <p>Total a pagar: ${{ cartTotal }}</p>
+    </div>
+
     <div class="container">
       <div class="card" v-for="product in cartItems" :key="product.id">
         <h3>
-          {{ product.product }}
+          {{ product.nombre }}
         </h3>
 
-        <img :src="product.image" alt="hamburguesa" class="imagen" />
+        <img :src="product.foto" alt="hamburguesa" class="imagen" />
 
-        <p>$ {{ product.price }}</p>
+        <p>$ {{ product.precio }}</p>
       </div>
     </div>
   </div>
@@ -23,7 +27,6 @@ import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters(['cartItems', 'cartTotal'])
-    
   }
 }
 </script>
@@ -40,18 +43,25 @@ export default {
 h1 {
   text-align: center;
   font-weight: bold;
+  margin: 80px;
+  color: white;
+  font-size: 75px;
 }
 .card {
-  background-color: aliceblue;
-  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.747);
+
+  border-radius: 5px;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  margin: 20px;
-  width: 50vh;
-  height: fit-content;
-  justify-content: center;
+  width: 40vh;
+  height: 55vh;
+  justify-content: space-around;
   align-items: center;
+}
+.containerResumen {
+  background-color: rgba(0, 0, 0, 0.747);
+  color: white;
 }
 .imagen {
   height: 150px;
@@ -63,9 +73,11 @@ h1 {
 
 h3 {
   font-weight: bold;
+  color: white;
 }
 p {
   font-weight: 500;
   text-align: center;
+  color: white;
 }
 </style>

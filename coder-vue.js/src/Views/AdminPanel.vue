@@ -184,28 +184,34 @@ export default {
   align-items: center;
 }
 .card {
-  background-color: aliceblue;
-  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.747);
+  border-radius: 5px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   margin: 20px;
-  width: 50vh;
-  height: fit-content;
-  justify-content: center;
+  width: 40vh;
+  height: 55vh;
+  justify-content: space-around;
   align-items: center;
 }
 p {
   width: 30vh;
   text-align: center;
+  color: white
 }
 h3 {
   font-weight: bold;
+  color: white
+
 }
 h1 {
   text-align: center;
   font-weight: bold;
-  margin: 80px;
+  margin-bottom: 80px;
+  margin-top: 20px;
+  color: white;
+  font-size: 75px;
 }
 .imagen {
   height: 150px;
@@ -239,6 +245,8 @@ input {
   border-radius: 20px;
   height: 40px;
   padding-left: 20px;
+  background-color: black;
+  color: white
 }
 .form {
   display: flex;
@@ -246,15 +254,5 @@ input {
   gap: 10px;
   padding: 20px;
 }
-/* .btn {
-  margin-top: 20px;
-  border: none;
- 
-  background-color: rgba(111, 175, 230, 0.452);
-  padding: 8px;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  color: black;
-}*/
+
 </style>

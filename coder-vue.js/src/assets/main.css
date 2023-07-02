@@ -1,7 +1,13 @@
 @import './base.css';
 
-html, body, #app {
-  background-color: rgba(205, 230, 252, 0.842);
+body
+ {
+  background-image: url('./descarga.png');
+  background-color: rgb(85, 85, 85);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 #app {
@@ -10,8 +16,6 @@ html, body, #app {
   /* padding: 2rem; */
   font-weight: normal;
 }
-
-
 
 @media (hover: hover) {
   a:hover {
