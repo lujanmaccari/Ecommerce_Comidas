@@ -8,15 +8,15 @@
       <form @submit.prevent="formSubmitHandler" class="containerForm">
         <div>
           <label for="name" class="typography">Nombre</label>
-          <input type="text" id="name" name="name" v-model="formState.name" />
+          <input type="text" id="name" name="name" v-model="formState.name" class="rounded-full h-8 pl-2"/>
         </div>
         <div>
           <label for="email" class="typography">Email</label>
-          <input type="email" id="email" name="email" v-model="formState.email" />
+          <input type="email" id="email" name="email" v-model="formState.email" class="rounded-full h-8 pl-2"/>
         </div>
         <div>
           <label for="message" class="typography">Contraseña</label>
-          <input type="text" id="password" name="password" v-model="formState.password" />
+          <input type="password" id="password" name="password" v-model="formState.password" class="rounded-full h-8 pl-2"/>
         </div>
         <div>
           <label for="isAdmin" class="typography">¿Es administrador?</label>
