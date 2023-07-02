@@ -1,14 +1,24 @@
 <template>
   <div>
+    <button
+      class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+    >
+      <router-link :to="{ name: 'gestion-pedidos' }"> Gestion de pedidos </router-link>
+    </button>
     <h1>Productos disponibles en la web</h1>
-    <div class="flex justify-center">
+    <div class="flex justify-center" v-if="!actualizar">
       <button
+        v-if="!showTable"
         @click="toggleTable"
         type="button"
         class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
       >
         Agregar un nuevo producto
       </button>
+      <h3 v-if="!actualizar && showTable">Agregar un nuevo producto</h3>
+    </div>
+    <div class="flex justify-center" v-if="actualizar">
+      <h3>Actualizar producto</h3>
     </div>
     <div v-if="showTable">
       <div class="form">
@@ -116,6 +126,10 @@ export default {
         if (response.status === 200) {
           this.mensajeActualizar = true
         }
+
+        setTimeout(() => {
+          this.showTable = false
+        }, 5000)
         return response.data
       } catch (error) {
         console.log('Error en actualizar producto' + error.message)
@@ -165,6 +179,9 @@ export default {
         if (response.status === 201) {
           this.addedToCart = true
         }
+        setTimeout(() => {
+          this.showTable = false
+        }, 5000)
         return response.data
       } catch (error) {
         console.log('Error en guardar producto' + error.message)
@@ -184,7 +201,7 @@ export default {
   align-items: center;
 }
 .card {
-  background-color: rgba(0, 0, 0, 0.747);
+  background-color: rgba(0, 0, 0, 0.829);
   border-radius: 5px;
   padding: 20px;
   display: flex;
@@ -198,12 +215,11 @@ export default {
 p {
   width: 30vh;
   text-align: center;
-  color: white
+  color: white;
 }
 h3 {
   font-weight: bold;
-  color: white
-
+  color: white;
 }
 h1 {
   text-align: center;
@@ -246,7 +262,7 @@ input {
   height: 40px;
   padding-left: 20px;
   background-color: black;
-  color: white
+  color: white;
 }
 .form {
   display: flex;
@@ -254,5 +270,4 @@ input {
   gap: 10px;
   padding: 20px;
 }
-
 </style>

@@ -70,6 +70,7 @@ export default {
       if (encontrarUsuario) {
         this.login = true
         this.invalidCredentials = false
+        localStorage.setItem('userInfo', JSON.stringify(encontrarUsuario))
         setTimeout(() => {
           this.$router.push(encontrarUsuario.isAdmin ? '/admin-panel' : '/user-panel')
         }, 3000)

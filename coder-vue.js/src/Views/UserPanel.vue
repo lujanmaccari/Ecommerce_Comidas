@@ -11,6 +11,43 @@
 
     <h1>Nuestra selección para vos</h1>
 
+    <div
+      v-if="addedToCart"
+      id="alert-additional-content-3"
+      class="p-4 mb-4 text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800"
+      role="alert"
+    >
+      <div class="flex items-center">
+        <span class="sr-only">Info</span>
+        <div class="text-lg font-medium text-green">Producto añadido con éxito!</div>
+      </div>
+
+      <div class="flex">
+        <router-link :to="{ name: 'cart' }">
+          <button
+            type="button"
+            class="text-white bg-green-800 hover:bg-green-900 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 text-center inline-flex items-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+          >
+            <svg
+              aria-hidden="true"
+              class="-ml-0.5 mr-2 h-4 w-4"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+              <path
+                fill-rule="evenodd"
+                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+            Ir al carrito
+          </button>
+        </router-link>
+      </div>
+    </div>
+
     <div class="container">
       <div class="card" v-for="item in listadoProductos" :key="item.id">
         <h3>
@@ -20,11 +57,13 @@
         <img :src="item.foto" alt="hamburguesa" class="imagen" />
 
         <p>$ {{ item.precio }}</p>
-        <div>
-          <button @click="addToCart(item)">
-            <p>Agregar al carrito</p>
-          </button>
-        </div>
+
+        <button
+          @click="addToCart(item) && obtenerUserInfo(item)"
+          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
+        >
+          <p>Agregar al carrito</p>
+        </button>
       </div>
     </div>
 
@@ -52,13 +91,18 @@
 <script>
 import { mapActions } from 'vuex'
 import { obtenerProductos } from '../gestionProductos'
+import axios from 'axios'
+
 export default {
   name: 'UserPanel',
   data() {
     return {
       // gestionProductos: new GestionProductos(),
       listadoProductos: [],
-      cart: []
+      cart: [],
+      userID: '',
+      updatedInfo: {},
+      addedToCart: false
     }
   },
   mounted() {
@@ -68,24 +112,50 @@ export default {
     ...mapActions({
       addToCart: 'addToCart' // Corrección: mapear la acción addToCart correctamente
     }),
-    // addToCart(product) {
-    //   this.addItemToCart(product)
-    // },
-    // cambiarNombre() {
-    //   this.$store.dispatch('cambiarNombrePersona')
-    // },
-    // addToCart() {
-    //   this.$store.dispatch('addToCartAction')
-    // },
+
     async obtenerProductos() {
       let comidas = await obtenerProductos()
       this.listadoProductos = comidas
       console.log(this.listadoProductos)
     },
-    async eliminarProducto() {
-      //   let { data: comidas } = await this.gestionProductos.obtenerProductos()
-      //   this.listadoProductos = comidas
-      //   console.log(this.listadoProductos)
+
+    async obtenerUserInfo(product) {
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+      this.userID = userInfo?.id
+      this.addedToCart = true
+      try {
+        const response = await axios.get(
+          `https://6498a1459543ce0f49e236df.mockapi.io/users/${this.userID}`
+        )
+        if (response.status === 200) {
+          const userInfo = response.data
+          this.cart.push(product)
+
+          this.updatedInfo = {
+            ...userInfo,
+            products: this.cart
+          }
+
+          this.actualizarUserInfo()
+        }
+      } catch (error) {
+        console.log('Error al obtener el userInfo', error.message)
+      }
+    },
+
+    async actualizarUserInfo() {
+      try {
+        const response = await axios.put(
+          `https://6498a1459543ce0f49e236df.mockapi.io/users/${this.userID}`,
+          this.updatedInfo
+        )
+        setTimeout(() => {
+          this.addedToCart = false
+        }, 1000)
+        return response.data
+      } catch (error) {
+        console.log('Error al obtener el userInfo', error.message)
+      }
     }
   }
 }
@@ -104,7 +174,7 @@ export default {
   align-items: center;
 }
 .card {
-  background-color: rgba(0, 0, 0, 0.747);
+  background-color: rgba(0, 0, 0, 0.829);
   border-radius: 5px;
   padding: 20px;
   display: flex;
@@ -115,15 +185,18 @@ export default {
   justify-content: space-around;
   align-items: center;
 }
+
 p {
   width: 30vh;
   text-align: center;
   color: white;
 }
+
 h3 {
   font-weight: bold;
   color: white;
 }
+
 h1 {
   text-align: center;
   font-weight: bold;
@@ -138,15 +211,5 @@ h1 {
 }
 .imagen:hover {
   opacity: 0.5;
-}
-
-.btn {
-  margin-top: 20px;
-  border: none;
-  background-color: transparent;
-  padding: 8px;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
 }
 </style>

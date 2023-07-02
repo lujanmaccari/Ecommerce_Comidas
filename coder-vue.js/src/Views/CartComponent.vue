@@ -48,8 +48,7 @@ h1 {
   font-size: 75px;
 }
 .card {
-  background-color: rgba(0, 0, 0, 0.747);
-
+  background-color: rgba(0, 0, 0, 0.829);
   border-radius: 5px;
   padding: 20px;
   display: flex;
@@ -60,7 +59,7 @@ h1 {
   align-items: center;
 }
 .containerResumen {
-  background-color: rgba(0, 0, 0, 0.747);
+  background-color: rgba(0, 0, 0, 0.829);
   color: white;
 }
 .imagen {
