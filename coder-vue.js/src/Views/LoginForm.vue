@@ -13,26 +13,21 @@
     >
       Inicio de sesion correcto
     </div>
-    <h1>Bienvenido!</h1>
+    <h1 class="typography">Bienvenido!</h1>
     <div>
-      <form @submit.prevent="formSubmitHandler">
+      <form @submit.prevent="formSubmitHandler" class="containerForm">
         <div>
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" v-model="formState.email" />
+          <label for="email" class="typography">Email</label>
+          <input type="email" id="email" name="email" v-model="formState.email" class="rounded-full h-8 pl-2"/>
         </div>
         <div>
-          <label for="message">Contraseña</label>
-          <input type="text" id="password" name="password" v-model="formState.password" />
+          <label for="message" class="typography">Contraseña</label>
+          <input type="password" id="password" name="password" v-model="formState.password" class="rounded-full h-8 pl-2"/>
         </div>
 
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-5 rounded">
+        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full">
           Enviar
         </button>
-        <router-link
-          :to="{ name: 'register' }"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >Registrarse</router-link
-        >
       </form>
     </div>
   </div>
@@ -84,18 +79,27 @@ export default {
 
 <style scoped>
 .container {
-  background-color: aliceblue;
+  background-color: rgba(0, 0, 0, 0.829);
   border-radius: 20px;
-  max-width: 400px;
+  width: 400px;
   padding: 200px;
   display: flex;
   flex-direction: column;
 }
-.form {
+h1.typography {
+  font-weight: bold;
+  font-size: 30px;
+  margin-top: 30px;
+}
+.typography {
+  color: white;
+}
+
+.containerForm {
+  height: 50vh;
   display: flex;
   flex-direction: column;
-
   justify-content: space-evenly;
-  height: 40vh;
+  align-items: center;
 }
 </style>

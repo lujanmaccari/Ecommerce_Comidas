@@ -1,16 +1,47 @@
 <template>
   <div class="general">
-    <div class="flex justify-end gap-4">
-      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-5 rounded">
+    <div class="flex justify-end gap-4" v-if="!login">
+      <button class="text-white py-2 my-5">
         <router-link :to="{ name: 'login' }"> Iniciar sesión </router-link>
       </button>
-      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-5 rounded">
+      <button class="text-white py-2 pl-4 my-5">
         <router-link :to="{ name: 'register' }"> Registrarse </router-link>
       </button>
     </div>
 
+    <div class="flex justify-end gap-4" v-if="login">
+      <button class="text-white py-2 my-5" @click="logout()">Cerrar sesión</button>
+    </div>
+
     <h1>Nuestra selección para vos</h1>
 
+    <!-- El usuario no esta loggeado -->
+    <div
+      v-if="mensajeLogin"
+      id="alert-additional-content-3"
+      class="p-4 mb-4 text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
+      role="alert"
+    >
+      <div class="flex items-center">
+        <span class="sr-only">Info</span>
+        <div class="text-lg font-medium text-green">
+          Inicia sesion para agregar productos al carrito
+        </div>
+      </div>
+
+      <div class="flex">
+        <router-link :to="{ name: 'login' }">
+          <button
+            type="button"
+            class="text-white bg-red-800 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 text-center inline-flex items-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+          >
+            Iniciar sesión
+          </button>
+        </router-link>
+      </div>
+    </div>
+
+    <!-- El producto se añadio al carrito -->
     <div
       v-if="addedToCart"
       id="alert-additional-content-3"
@@ -59,7 +90,7 @@
         <p>$ {{ item.precio }}</p>
 
         <button
-          @click="addToCart(item) && obtenerUserInfo(item)"
+          @click="agregarAlCarrito(item)"
           class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
         >
           <p>Agregar al carrito</p>
@@ -102,27 +133,58 @@ export default {
       cart: [],
       userID: '',
       updatedInfo: {},
-      addedToCart: false
+      addedToCart: false,
+      userInfo: {},
+      login: true,
+      mensajeLogin: false
     }
   },
   mounted() {
     this.obtenerProductos()
   },
+  created() {
+    this.obtenerAutorizacion()
+  },
   methods: {
     ...mapActions({
-      addToCart: 'addToCart' // Corrección: mapear la acción addToCart correctamente
+      addToCart: 'addToCart'
     }),
 
+    // Productos cargados
     async obtenerProductos() {
       let comidas = await obtenerProductos()
       this.listadoProductos = comidas
-      console.log(this.listadoProductos)
     },
 
+    // Chequear si el usuario esta loggeado
+    async obtenerAutorizacion() {
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+      if (userInfo === null) {
+        this.login = false
+      } else {
+        this.userInfo = userInfo
+        this.login = true
+      }
+    },
+
+    // Impedir agregar productos al carrito a no ser que el usuario este loggeado
+    agregarAlCarrito(item) {
+      if (this.login) {
+        this.addToCart(item)
+        this.obtenerUserInfo(item)
+        this.addedToCart = true
+      } else {
+        this.mensajeLogin = true
+      }
+    },
+
+    // Obtener info de loggeo y data de mockapi segun id en localStorage
     async obtenerUserInfo(product) {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'))
       this.userID = userInfo?.id
       this.addedToCart = true
+
       try {
         const response = await axios.get(
           `https://6498a1459543ce0f49e236df.mockapi.io/users/${this.userID}`
@@ -143,6 +205,7 @@ export default {
       }
     },
 
+    // Actualizar data de mockapi para cargar productos al carrito asociados al usuario loggeado
     async actualizarUserInfo() {
       try {
         const response = await axios.put(
@@ -156,6 +219,11 @@ export default {
       } catch (error) {
         console.log('Error al obtener el userInfo', error.message)
       }
+    },
+
+    logout() {
+      this.login = false
+      localStorage.clear()
     }
   }
 }
