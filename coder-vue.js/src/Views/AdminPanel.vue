@@ -1,25 +1,30 @@
 <template>
   <div>
-    <button
-      class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
-    >
-      <router-link :to="{ name: 'gestion-pedidos' }"> Gestion de pedidos </router-link>
-    </button>
-    <h1>Productos disponibles en la web</h1>
+    <div class="flex justify-end">
+      <button class="text-white text-sm px-5 py-2.5 mr-2 mb-2">
+        <router-link :to="{ name: 'gestion-pedidos' }">Gestion de pedidos </router-link>
+      </button>
+    </div>
+    <h1>ABM Productos</h1>
+    <!-- Agregar productos -->
     <div class="flex justify-center" v-if="!actualizar">
       <button
         v-if="!showTable"
         @click="toggleTable"
         type="button"
-        class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+        class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
       >
         Agregar un nuevo producto
       </button>
       <h3 v-if="!actualizar && showTable">Agregar un nuevo producto</h3>
     </div>
+
+    <!-- Actualizar productos -->
     <div class="flex justify-center" v-if="actualizar">
       <h3>Actualizar producto</h3>
     </div>
+
+    <!-- Formulario para añadir/actualizar -->
     <div v-if="showTable">
       <div class="form">
         <input type="text" placeholder="Ingrese nombre" v-model="formState.nombre" />
@@ -27,26 +32,46 @@
         <input type="text" placeholder="Ingrese precio" v-model="formState.precio" />
         <input type="text" placeholder="Ingrese foto" v-model="formState.foto" />
       </div>
+
       <div class="flex justify-center">
         <button
           v-if="actualizar"
           @click="actualizarComida()"
-          class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+          class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
         >
           Actualizar
         </button>
         <button
           v-else
           @click="guardarProducto(formState)"
-          class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+          class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
         >
           Agregar
         </button>
       </div>
-      <p v-if="addedToCart">Agregado!</p>
-      <p v-if="mensajeActualizar">Actualizado!</p>
+
+      <!-- Añadido con exito -->
+      <div
+        v-if="addedToList"
+        id="alert-additional-content-3"
+        class="p-4 mb-4 text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800"
+        role="alert"
+      >
+        <div class="text-lg font-medium text-green">Producto añadido con éxito</div>
+      </div>
+
+      <!-- Actualizado con exito -->
+      <div
+        v-if="mensajeActualizar"
+        id="alert-additional-content-3"
+        class="p-4 mb-4 text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800"
+        role="alert"
+      >
+        <div class="text-lg font-medium text-green">Producto actualizado con éxito</div>
+      </div>
     </div>
 
+    <!-- Listado de productos cargados -->
     <div class="container">
       <div class="card" v-for="item in listadoProductos" :key="item.id">
         <h3>
@@ -99,7 +124,7 @@ export default {
         isInCart: false
       },
       id: '',
-      addedToCart: false,
+      addedToList: false,
       actualizar: false,
       mensajeActualizar: false
     }
@@ -108,6 +133,8 @@ export default {
     this.obtenerComidas()
   },
   methods: {
+
+    // Obtener todos los productos
     async obtenerComidas() {
       let comidas = await obtenerProductos()
       this.listadoProductos = comidas
@@ -117,6 +144,7 @@ export default {
       this.showTable = !this.showTable
     },
 
+    // Actualizar productos
     async actualizarComida() {
       try {
         const response = await axios.put(
@@ -129,25 +157,31 @@ export default {
 
         setTimeout(() => {
           this.showTable = false
+          this.mensajeActualizar = false
         }, 5000)
+
+        this.obtenerComidas()
         return response.data
       } catch (error) {
         console.log('Error en actualizar producto' + error.message)
       }
     },
 
+    // Eliminar productos
     async eliminarComida(idProduct) {
       this.id = idProduct
       try {
         const response = await axios.delete(
           'https://6498a1459543ce0f49e236df.mockapi.io/products/' + this.id
         )
+        this.obtenerComidas()
         return response.data
       } catch (error) {
         console.log('Error en borrar producto' + error.message)
       }
     },
 
+    // Obtener producto por id
     async obtenerComida(idProduct) {
       this.id = idProduct
       this.showTable = true
@@ -170,6 +204,7 @@ export default {
       }
     },
 
+    // Guardar producto
     async guardarProducto(producto) {
       try {
         const response = await axios.post(
@@ -177,11 +212,12 @@ export default {
           producto
         )
         if (response.status === 201) {
-          this.addedToCart = true
+          this.addedToList = true
         }
         setTimeout(() => {
           this.showTable = false
         }, 5000)
+        this.obtenerComidas()
         return response.data
       } catch (error) {
         console.log('Error en guardar producto' + error.message)
