@@ -8,7 +8,7 @@
     </div>
 
     <div class="container">
-      <div class="card" v-for="product in cartItems" :key="product.id">
+      <div class="card" v-for="(product, index) in cartItems" :key="product.id">
         <h3>
           {{ product.nombre }}
         </h3>
@@ -16,17 +16,29 @@
         <img :src="product.foto" alt="hamburguesa" class="imagen" />
 
         <p>$ {{ product.precio }}</p>
+        <button
+          @click="removeItem(index)"
+          class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+        >
+          Eliminar producto
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
   computed: {
     ...mapGetters(['cartItems', 'cartTotal'])
+  },
+  methods: {
+    ...mapActions(['removeItemFromCart']),
+    removeItem(index) {
+      this.removeItemFromCart(index)
+    }
   }
 }
 </script>
