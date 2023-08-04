@@ -24,7 +24,7 @@ const router = createRouter({
 const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
 router.beforeEach((to, from, next) => {
-  if (to.path.includes('admin') && !userInfo?.isAdmin) {
+  if (to.path.includes('admin') && userInfo && !userInfo?.isAdmin) {
     next({ name: 'login' })
   } else if (to.path.includes('user') && userInfo?.isAdmin) {
     next({ name: 'login' })

@@ -1,6 +1,9 @@
 <template>
   <div>
     <div class="flex justify-end">
+      <button @click="logout()" class="text-white text-sm px-5 py-2.5 mr-2 mb-2">
+        <router-link :to="{ name: 'login' }">Cerrar sesión </router-link>
+      </button>
       <button class="text-white text-sm px-5 py-2.5 mr-2 mb-2">
         <router-link :to="{ name: 'gestion-pedidos' }">Gestion de pedidos </router-link>
       </button>
@@ -133,6 +136,11 @@ export default {
     this.obtenerComidas()
   },
   methods: {
+    logout() {
+      localStorage.clear()
+      console.log("cerro sesion")
+    },
+
     // Obtener todos los productos
     async obtenerComidas() {
       let comidas = await obtenerProductos()

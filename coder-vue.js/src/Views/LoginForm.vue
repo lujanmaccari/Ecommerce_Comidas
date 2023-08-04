@@ -55,7 +55,6 @@ export default {
   methods: {
     async formSubmitHandler() {
       const { data: usuariosCreados } = await this.usuario.obtenerUsuarios()
-      console.log(usuariosCreados)
 
       const encontrarUsuario = usuariosCreados.find(
         (usuario) =>
