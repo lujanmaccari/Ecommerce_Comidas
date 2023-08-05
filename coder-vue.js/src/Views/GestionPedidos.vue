@@ -13,15 +13,18 @@
           Pedido a nombre de:
           {{ product.name }}
         </h3>
-        <div class="flex justify-start gap-3">
-          <div class="card" v-for="item in product.products" :key="item.id">
-            <h3 class="text-white">
-              {{ item.nombre }}
-            </h3>
+        <div v-for="item in product.orders" :key="item.id">
+          <h3 class="text-white">Realizado el: {{ formatDate(item.timestamp) }}</h3>
+          <div class="flex justify-start gap-3">
+            <div class="card" v-for="dato in item.products" :key="dato.id">
+              <h3 class="text-white">
+                {{ dato.nombre }}
+              </h3>
 
-            <img :src="item.foto" alt="hamburguesa" class="imagen" />
+              <img :src="dato.foto" alt="hamburguesa" class="imagen" />
 
-            <p class="text-white">$ {{ item.precio }}</p>
+              <p class="text-white">$ {{ dato.precio }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -53,13 +56,31 @@ export default {
       // Obtener lista de usuarios y guardarlo en estado
       const { data: usuariosCreados } = await this.usuarios.obtenerUsuarios()
       this.productos = usuariosCreados
-
       // Verificar que usuario tiene productos cargados en en carrito y guardarlos en estado
       for (let obj of usuariosCreados) {
-        if (obj.products.length > 0) {
+        if (obj.orders?.length > 0) {
           this.usuariosConPedidos.push(obj)
         }
       }
+    },
+
+    formatDate(date) {
+      const f2 = date?.replace('T', ' ')
+      const newDate = new Date(f2)
+      let day = newDate.getDate()
+      if (day < 10) {
+        day = '0' + day
+      }
+
+      let month = newDate.getMonth() + 1
+      if (month < 10) {
+        month = '0' + month
+      }
+
+      let year = newDate.getFullYear()
+
+      const fechaFormateada = year + '-' + month + '-' + day
+      return fechaFormateada
     }
   }
 }

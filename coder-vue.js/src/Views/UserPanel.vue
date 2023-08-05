@@ -181,6 +181,7 @@ export default {
 
     // Obtener info de loggeo y data de mockapi segun id en localStorage
     async obtenerUserInfo(product) {
+      const date = new Date()
       const userInfo = JSON.parse(localStorage.getItem('userInfo'))
       this.userID = userInfo?.id
       this.addedToCart = true
@@ -192,10 +193,15 @@ export default {
         if (response.status === 200) {
           const userInfo = response.data
           this.cart.push(product)
-
           this.updatedInfo = {
             ...userInfo,
-            products: this.cart
+            orders: [
+              {
+                timestamp: date,
+                total: this.cart.reduce((total, item) => total + parseFloat(item.precio), 0),
+                products: this.cart
+              }
+            ]
           }
 
           this.actualizarUserInfo()

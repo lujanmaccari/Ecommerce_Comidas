@@ -3,20 +3,38 @@
     <h1 class="typography">Creá tu usuario</h1>
     <div>
       <div v-if="incomplete" class="typography">Complete todos los campos</div>
-      <div v-if="sent">Gracias por ponerte en contacto</div>
+      <div v-if="sent">Cuenta creada con exito</div>
 
       <form @submit.prevent="formSubmitHandler" class="containerForm">
         <div>
           <label for="name" class="typography">Nombre</label>
-          <input type="text" id="name" name="name" v-model="formState.name" class="rounded-full h-8 pl-2"/>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            v-model="formState.name"
+            class="rounded-full h-8 pl-2"
+          />
         </div>
         <div>
           <label for="email" class="typography">Email</label>
-          <input type="email" id="email" name="email" v-model="formState.email" class="rounded-full h-8 pl-2"/>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            v-model="formState.email"
+            class="rounded-full h-8 pl-2"
+          />
         </div>
         <div>
           <label for="message" class="typography">Contraseña</label>
-          <input type="password" id="password" name="password" v-model="formState.password" class="rounded-full h-8 pl-2"/>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            v-model="formState.password"
+            class="rounded-full h-8 pl-2"
+          />
         </div>
         <div>
           <label for="isAdmin" class="typography">¿Es administrador?</label>
@@ -28,9 +46,18 @@
             class="ml-5"
           />
         </div>
-        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full">
-          Crear
-        </button>
+        <div class="flex gap-1">
+          <button
+            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4  rounded-full"
+          >
+            Crear
+          </button>
+          <button
+            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4  rounded-full"
+          >
+          <router-link :to="{ name: 'login' }">Ir al login</router-link>
+          </button>
+        </div>
       </form>
     </div>
   </div>
@@ -42,7 +69,6 @@ export default {
   name: 'RegisterComponent',
   data() {
     return {
-      // path: '/',
       sent: false,
       incomplete: false,
       formState: {
@@ -62,7 +88,6 @@ export default {
         this.incomplete = true
       } else {
         let newUser = await this.usuario.guardarUsuario(this.formState)
-        console.log(newUser)
         this.sent = true
         this.incomplete = false
       }
