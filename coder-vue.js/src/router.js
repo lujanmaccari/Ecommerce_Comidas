@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory  } from 'vue-router'
 import LoginForm from './Views/LoginForm.vue'
 import RegisterComponent from './Views/RegisterComponent.vue'
 import CartComponent from './Views/CartComponent.vue'
@@ -17,8 +17,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes: routes
+  history: createWebHashHistory(import.meta.env.BASE_URL),  routes: routes
 })
 
 const userInfo = JSON.parse(localStorage.getItem('userInfo'))
