@@ -172,7 +172,7 @@ export default {
     agregarAlCarrito(item) {
       if (this.login) {
         this.addToCart(item)
-        this.obtenerUserInfo(item)
+        // this.obtenerUserInfo(item)
         this.addedToCart = true
       } else {
         this.mensajeLogin = true

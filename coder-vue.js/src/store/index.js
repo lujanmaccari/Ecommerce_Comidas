@@ -13,6 +13,11 @@ const store = createStore({
         state.cart.push({ ...product, quantity: 1 })
       }
     },
+
+    cleanCart(state){
+      state.cart = []
+    },
+
     removeFromCart(state, index) {
       const product = state.cart[index]
       if (product.quantity > 1) {
@@ -36,6 +41,9 @@ const store = createStore({
     },
     removeAll({ commit }, index) {
       commit('removeAll', index)
+    },
+    cleanCart({commit}){
+      commit('cleanCart')
     }
   },
   getters: {
