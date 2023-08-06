@@ -7,24 +7,23 @@
     </div>
     <h1>Gestion de pedidos</h1>
 
-    <div>
-      <div class="container" v-for="product in usuariosConPedidos" :key="product.id">
-        <h3 class="typography">
-          Pedido a nombre de:
-          {{ product.name }}
-        </h3>
-        <div v-for="item in product.orders" :key="item.id">
-          <h3 class="text-white">Realizado el: {{ formatDate(item.timestamp) }}</h3>
-          <div class="flex justify-start gap-3">
-            <div class="card" v-for="dato in item.products" :key="dato.id">
-              <h3 class="text-white">
-                {{ dato.nombre }}
-              </h3>
+    <div v-for="product in usuariosConPedidos" :key="product.id">
+      <h3 class="typography">
+        Pedido a nombre de:
+        {{ product.name }}
+      </h3>
+      <div v-for="item in product.orders" :key="item.id">
+        <h3 class="text-white">Realizado el: {{ formatDate(item.timestamp) }}</h3>
+        <div class="container">
+          <div class="card" v-for="dato in item.products" :key="dato.id">
+            <p class="circle">{{ dato.quantity }}</p>
+            <h3 class="text-white">
+              {{ dato.nombre }}
+            </h3>
 
-              <img :src="dato.foto" alt="hamburguesa" class="imagen" />
+            <img :src="dato.foto" alt="hamburguesa" class="imagen" />
 
-              <p class="text-white">$ {{ dato.precio }}</p>
-            </div>
+            <p class="text-white">$ {{ dato.precio }}</p>
           </div>
         </div>
       </div>
@@ -56,6 +55,8 @@ export default {
       // Obtener lista de usuarios y guardarlo en estado
       const { data: usuariosCreados } = await this.usuarios.obtenerUsuarios()
       this.productos = usuariosCreados
+
+      console.log(usuariosCreados)
       // Verificar que usuario tiene productos cargados en en carrito y guardarlos en estado
       for (let obj of usuariosCreados) {
         if (obj.orders?.length > 0) {
@@ -91,16 +92,10 @@ export default {
   width: 200vh;
 }
 .container {
-  height: fit-content;
   margin-bottom: 50px;
   display: flex;
-  flex-direction: column;
   flex-wrap: wrap;
-}
-.containerPedidos {
-  margin: 0 auto;
-  display: flex;
-  justify-content: left;
+  justify-content: start;
 }
 
 h1 {
@@ -117,7 +112,14 @@ h1 {
   font-size: 40px;
 }
 
+p {
+  font-weight: 500;
+  text-align: center;
+  color: white;
+}
 .card {
+  margin: 0px 20px 20px 0px;
+  position: relative;
   background-color: rgba(0, 0, 0, 0.829);
   border-radius: 5px;
   padding: 20px;
@@ -128,5 +130,16 @@ h1 {
   height: 55vh;
   justify-content: space-around;
   align-items: center;
+}
+
+.circle {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-color: rgb(211, 7, 7);
+  position: absolute;
+  top: 0%;
+  left: 99%;
+  transform: translate(-50%, -50%);
 }
 </style>

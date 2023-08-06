@@ -122,7 +122,6 @@
 <script>
 import { mapActions } from 'vuex'
 import { obtenerProductos } from '../gestionProductos'
-import axios from 'axios'
 
 export default {
   name: 'UserPanel',
@@ -176,54 +175,6 @@ export default {
         this.addedToCart = true
       } else {
         this.mensajeLogin = true
-      }
-    },
-
-    // Obtener info de loggeo y data de mockapi segun id en localStorage
-    async obtenerUserInfo(product) {
-      const date = new Date()
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-      this.userID = userInfo?.id
-      this.addedToCart = true
-
-      try {
-        const response = await axios.get(
-          `https://6498a1459543ce0f49e236df.mockapi.io/users/${this.userID}`
-        )
-        if (response.status === 200) {
-          const userInfo = response.data
-          this.cart.push(product)
-          this.updatedInfo = {
-            ...userInfo,
-            orders: [
-              {
-                timestamp: date,
-                total: this.cart.reduce((total, item) => total + parseFloat(item.precio), 0),
-                products: this.cart
-              }
-            ]
-          }
-
-          this.actualizarUserInfo()
-        }
-      } catch (error) {
-        console.log('Error al obtener el userInfo', error.message)
-      }
-    },
-
-    // Actualizar data de mockapi para cargar productos al carrito asociados al usuario loggeado
-    async actualizarUserInfo() {
-      try {
-        const response = await axios.put(
-          `https://6498a1459543ce0f49e236df.mockapi.io/users/${this.userID}`,
-          this.updatedInfo
-        )
-        setTimeout(() => {
-          this.addedToCart = false
-        }, 1000)
-        return response.data
-      } catch (error) {
-        console.log('Error al obtener el userInfo', error.message)
       }
     },
 

@@ -56,7 +56,7 @@
       <p>Parece que aún no has seleccionado nada...</p>
       <router-link to="user-panel"> <p>Ir a la tienda</p></router-link>
     </div>
-    
+
     <div v-if="mensajeCompraExitosa">
       <div class="alert alert-success" role="alert">
         <p>¡Tu compra se realizó correctamente!</p>
@@ -109,19 +109,20 @@ export default {
         const response = await axios.get(
           `https://6498a1459543ce0f49e236df.mockapi.io/users/${this.userID}`
         )
-        if (response.status === 200 && this.cartItems.length > 0) {
+        if (response.status === 200) {
           const userInfo = response.data
-          this.cart.push(this.cartItems)
+
           this.updatedInfo = {
             ...userInfo,
             orders: [
               {
                 timestamp: date,
                 total: this.cart.reduce((total, item) => total + parseFloat(item.precio), 0),
-                products: this.cart
+                products: this.cartItems
               }
             ]
           }
+          this.actualizarUserInfo()
 
           this.mensajeCompraExitosa = true
 
@@ -129,6 +130,21 @@ export default {
             this.clean()
           }, 100)
         }
+      } catch (error) {
+        console.log('Error al obtener el userInfo', error.message)
+      }
+    },
+
+    async actualizarUserInfo() {
+      try {
+        const response = await axios.put(
+          `https://6498a1459543ce0f49e236df.mockapi.io/users/${this.userID}`,
+          this.updatedInfo
+        )
+        setTimeout(() => {
+          this.addedToCart = false
+        }, 1000)
+        return response.data
       } catch (error) {
         console.log('Error al obtener el userInfo', error.message)
       }
